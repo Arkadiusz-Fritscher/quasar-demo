@@ -3,7 +3,7 @@ import axios from "axios";
 // import { useStore } from "src/stores/store";
 // import { Cookies } from "quasar";
 
-const api = axios.create({ baseURL: "http://localhost:1337" });
+const api = axios.create({ baseURL: process.env.STRAPI_URL });
 // const store = useStore();
 
 export default boot(({ app, router, store }) => {

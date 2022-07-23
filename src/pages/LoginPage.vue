@@ -2,21 +2,30 @@
 import { api } from "boot/axios";
 import { useQuasar } from "quasar";
 import { useStore } from "src/stores/store";
-import { onBeforeMount } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const $q = useQuasar();
 const store = useStore();
 const router = useRouter();
+const user = ref();
 
 const login = async () => {
+  user.value = "has clicked";
   try {
     const { data } = await api.post("/api/auth/local", {
       identifier: "mail.95qm@gmail.com",
       password: "esweeswe",
     });
 
-    $q.cookies.set("strapi_jwt", data.jwt);
+    user.value = data;
+
+    $q.cookies.set("strapi_jwt", data.jwt, {
+      expires: 14,
+      path: "/",
+      sameSite: "Strict",
+      secure: true,
+    });
     store.user = data.user;
     store.token = data.jwt;
 
@@ -35,7 +44,8 @@ onBeforeMount(() => {
 
 <template>
   <div>
-    <q-btn @click="login">Login</q-btn>
+    <pre>{{ user }}</pre>
+    <button @click="login">Login</button>
   </div>
 </template>
 
