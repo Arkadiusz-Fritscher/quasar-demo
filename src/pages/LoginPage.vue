@@ -67,8 +67,7 @@ const login = async () => {
           <q-form class="q-gutter-md" @submit="login">
             <q-input
               v-model="email"
-              type="email"
-              label="Email"
+              label="Nutzername"
               clearable
               filled
               square
@@ -78,7 +77,7 @@ const login = async () => {
               :loading="isLoading"
               :rules="[
                 (val) =>
-                  (val && val.length > 0) || 'Email darf nicht leer sein',
+                  (val && val.length > 0) || 'Nutzername darf nicht leer sein',
               ]"
             />
 
