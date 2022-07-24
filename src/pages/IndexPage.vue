@@ -1,6 +1,5 @@
 <script>
 import { useStore } from "src/stores/store";
-import { api } from "boot/axios";
 import { ref } from "vue";
 import BasePageTitle from "src/components/BasePageTitle.vue";
 import TheBuildingList from "src/components/buildings/TheBuildingList.vue";

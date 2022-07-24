@@ -19,6 +19,9 @@ export const useStore = defineStore("store", {
         return false;
       }
     },
+    canUserEdit(state) {
+      return state.user?.role?.type === "editor";
+    },
   },
 
   actions: {
