@@ -50,9 +50,16 @@ const buildings = computed(() => {
 </template>
 
 <style scoped>
+/* .gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 1fr);
+  gap: 24px;
+} */
+
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 24px;
+  grid-template-rows: masonry;
+  gap: 1rem;
 }
 </style>

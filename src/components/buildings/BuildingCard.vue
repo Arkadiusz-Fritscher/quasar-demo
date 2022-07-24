@@ -15,21 +15,30 @@ const handleClick = (id) => {
 </script>
 
 <template>
-  <q-card @click="handleClick(building.id)">
+  <q-card bordered flat @click="handleClick(building.id)">
     <q-card-section horizontal>
-      <q-card-section class="col-5 flex flex-center">
-        <q-img src="https://picsum.photos/400/300.jpg" />
-      </q-card-section>
+      <!-- <q-card-section class="col-5 flex flex-center"> -->
+      <q-img
+        class="col-5 height-full"
+        src="https://picsum.photos/400/300.jpg"
+      />
+      <!-- </q-card-section> -->
 
       <q-card-section>
-        <div class="text-h5 q-mt-sm q-mb-xs">
+        <div class="text-h5 text-weight-medium">
           {{ building.attributes.barcode }}
         </div>
-        <q-chip outline :clickable="false" size="sm" color="schauloch">{{
-          building.attributes.type
-        }}</q-chip>
+        <div class="text-caption">{{ building.attributes.location }}</div>
+        <q-badge
+          :color="building.attributes.type.toLowerCase()"
+          :label="building.attributes.type"
+          class="q-pa-xs"
+          text-color="dark"
+        />
 
-        <div class="text-caption text-grey">
+        <div
+          class="text-body text-grey-8 q-mt-sm ellipsis-3-lines card-description"
+        >
           {{ building.attributes.description }}
         </div>
       </q-card-section>
@@ -39,7 +48,14 @@ const handleClick = (id) => {
 
 <style scoped>
 .q-card {
-  width: 100%;
+  /* width: 100%;
   max-width: 360px;
+  max-height: min-content;
+  */
+  align-self: start;
+}
+
+.card-description {
+  min-height: 8ch;
 }
 </style>

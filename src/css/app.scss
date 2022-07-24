@@ -1,8 +1,27 @@
-// app global css in SCSS form
-.q-router-link--active {
-  color: initial !important;
+$armaturenschacht: #fda4af;
+$kontrollschacht: #c7d2fe;
+$schauloch: #a7f3d0;
+
+.text-schauloch {
+  color: $schauloch !important;
 }
 
-.q-router-link--exact-active {
-  color: var(--q-primary) !important;
+.bg-schauloch {
+  background: $schauloch !important;
+}
+
+.text-kontrollschacht {
+  color: $kontrollschacht !important;
+}
+
+.bg-kontrollschacht {
+  background: $kontrollschacht !important;
+}
+
+.text-armaturenschacht {
+  color: $armaturenschacht !important;
+}
+
+.bg-armaturenschacht {
+  background: $armaturenschacht !important;
 }

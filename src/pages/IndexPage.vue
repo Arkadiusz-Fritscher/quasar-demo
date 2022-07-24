@@ -31,13 +31,14 @@ export default {
     <BasePageTitle>Bauwerke</BasePageTitle>
 
     <!-- Building type selection -->
-    <div class="row">
+    <div class="row q-mb-md">
       <q-select
         :options="store.buildingTypes"
         v-model="selectedBuildingType"
         outlined
         label="Bauwerk Art"
         clearable
+        dense
         :class="[
           { 'col-12': $q.screen.lt.md },
           { 'col-4': $q.screen.md },

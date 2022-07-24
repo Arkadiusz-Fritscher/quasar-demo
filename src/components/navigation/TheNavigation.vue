@@ -62,6 +62,22 @@ const selectionStyle = computed(() => {
 
   return "col-7";
 });
+
+const avatarName = computed(() => {
+  if (store.user?.firstname && store.user?.lastname) {
+    return `${store.user.firstname
+      .toUpperCase()
+      .charAt(0)}.${store.user.lastname.toUpperCase().charAt(0)}`;
+  } else if (store.user?.firstname) {
+    return `${store.user?.firstname.toUpperCase().charAt(0)}`;
+  } else if (store.user?.lastname) {
+    return `${store.user?.lastname.toUpperCase().charAt(0)}`;
+  } else if (store.user?.username) {
+    return `${store.user?.username.toUpperCase().charAt(0)}`;
+  } else {
+    return "FW";
+  }
+});
 </script>
 
 <template>
@@ -119,6 +135,14 @@ const selectionStyle = computed(() => {
         </template>
       </q-select>
 
+      <q-avatar
+        rounded
+        color="secondary"
+        font-size="1rem"
+        text-color="white"
+        class="q-ml-md"
+        >{{ avatarName }}</q-avatar
+      >
       <!-- <q-input
         dark
         dense
