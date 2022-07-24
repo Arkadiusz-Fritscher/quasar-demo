@@ -30,7 +30,7 @@ const buildings = computed(() => {
 </script>
 
 <template>
-  <section>
+  <q-page>
     <q-infinite-scroll @load="loadMore" :offset="250">
       <div class="gallery">
         <BuildingCard
@@ -46,7 +46,7 @@ const buildings = computed(() => {
         </div>
       </template>
     </q-infinite-scroll>
-  </section>
+  </q-page>
 </template>
 
 <style scoped>

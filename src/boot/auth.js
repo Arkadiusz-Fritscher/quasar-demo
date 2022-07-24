@@ -12,8 +12,6 @@ if (token) {
   api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 }
 
-console.log(token);
-
 export default boot(({ app, router, store }) => {
   const $store = useStore(store);
 
@@ -33,13 +31,6 @@ export default boot(({ app, router, store }) => {
   if (token && !$store.user) {
     fetchUser();
   }
-
-  // router.beforeEach((to, from, next) => {
-  //   const _store = useStore();
-  //   console.log(_store.isAuth);
-  //   if (to.meta.auth && _store.isAuth) next({ name: "login" });
-  //   else next();
-  // });
 });
 
 // export { axios, api };
