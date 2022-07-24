@@ -54,8 +54,6 @@ export const useStore = defineStore("store", {
           this.buildings.push(...data.data);
           this.meta = data.meta;
 
-          console.log("fetch more...", this.meta);
-
           this.isFetchingBuildings = false;
           return data;
         } catch (err) {
