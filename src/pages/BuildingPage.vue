@@ -123,7 +123,9 @@ const needGetOff = computed(() => {
         </li>
       </ul>
     </section>
-    <section class="img-gallery q-mt-xl">
+
+    <q-separator class="q-mt-md q-mb-lg" />
+    <section class="img-gallery">
       <q-img
         src="https://placeimg.com/600/400/nature"
         :ratio="4 / 3"
