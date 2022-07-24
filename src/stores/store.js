@@ -59,7 +59,6 @@ export const useStore = defineStore("store", {
           console.log(err.message);
         }
       } else {
-        console.log("noting to fetch..");
         return;
       }
     },
@@ -79,9 +78,6 @@ export const useStore = defineStore("store", {
 
           this.buildings = data.data;
           this.meta = data.meta;
-
-          console.log("initial fetch", data.meta);
-
           this.isFetchingBuildings = false;
           return data;
         } catch (err) {
