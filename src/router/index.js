@@ -34,5 +34,14 @@ export default route(function ({ store, ssrContext }) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
+  Router.beforeEach((to, from, next) => {
+    const store = useStore();
+    if (to.meta.auth && !store.isAuth) {
+      return next({ name: "login" });
+    } else {
+      return next();
+    }
+  });
+
   return Router;
 });

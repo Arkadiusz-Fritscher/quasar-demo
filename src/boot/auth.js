@@ -4,13 +4,15 @@ import { api } from "boot/axios";
 import { useStore } from "src/stores/store";
 import { Cookies } from "quasar";
 
-const hasToken = Cookies.has("strapi_jwt");
+const token =
+  Cookies.get("strapi_jwt") || window.sessionStorage.getItem("strapi_jwt");
 
-if (hasToken) {
-  api.defaults.headers.common["Authorization"] = `Bearer ${Cookies.get(
-    "strapi_jwt"
-  )}`;
+// Set default Axios Auth header
+if (token) {
+  api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 }
+
+console.log(token);
 
 export default boot(({ app, router, store }) => {
   const $store = useStore(store);
@@ -24,20 +26,20 @@ export default boot(({ app, router, store }) => {
     }
   };
 
-  if (hasToken && !$store.token) {
-    $store.token = Cookies.get("strapi_jwt");
+  if (token && !$store.token) {
+    $store.token = token;
   }
 
-  if (hasToken && !$store.user) {
+  if (token && !$store.user) {
     fetchUser();
   }
 
-  router.beforeEach((to, from) => {
-    if (to.meta.auth && !$store.token) {
-      console.log("user", $store.user);
-      return { name: "login" };
-    }
-  });
+  // router.beforeEach((to, from, next) => {
+  //   const _store = useStore();
+  //   console.log(_store.isAuth);
+  //   if (to.meta.auth && _store.isAuth) next({ name: "login" });
+  //   else next();
+  // });
 });
 
 // export { axios, api };

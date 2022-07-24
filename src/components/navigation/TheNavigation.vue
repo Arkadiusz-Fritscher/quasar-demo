@@ -1,10 +1,13 @@
 <script setup>
 import NavigationMenuLinkVue from "./NavigationMenuLink.vue";
-import useStore from "src/composables/store";
+import { useStore } from "src/stores/store";
+import { useRouter } from "vue-router";
 import { computed, ref } from "vue";
 import { useQuasar } from "quasar";
-const { store } = useStore();
+
 const $q = useQuasar();
+const store = useStore();
+const router = useRouter();
 
 const menuLinks = [
   {
@@ -22,24 +25,26 @@ const toggleMenu = () => {
 
 const search = ref("");
 const searchResults = ref([]);
-const searchBuilding = async (val, update) => {
-  if (val === "") {
-    update(() => {
+
+const isLoadingOptions = ref(false);
+const searchBuilding = (val, update) => {
+  update(async () => {
+    if (val === "") {
       searchResults.value = [];
-    });
+    } else {
+      isLoadingOptions.value = true;
+      const options = await store.findBuilding(val);
 
-    return;
-  }
-
-  update(() => {
-    const options = store.buildings
-      .filter((building) =>
-        building.barcode.toLocaleLowerCase().includes(val.toLocaleLowerCase())
-      )
-      .map((result) => result.barcode);
-
-    searchResults.value = options;
+      searchResults.value = options;
+      isLoadingOptions.value = false;
+    }
   });
+};
+
+const handleOptionClick = (id) => {
+  document.activeElement?.blur();
+  search.value = "";
+  router.push({ name: "building", params: { id } });
 };
 
 const selectionStyle = computed(() => {
@@ -77,6 +82,7 @@ const selectionStyle = computed(() => {
         use-input
         v-model="search"
         @filter="searchBuilding"
+        @add="handleOptionClick"
         :options="searchResults"
         dark
         standout
@@ -84,14 +90,28 @@ const selectionStyle = computed(() => {
         clearable
         hide-dropdown-icon
         behavior="menu"
-        hide-selected
-        fill-input
         :class="selectionStyle"
+        :loading="isLoadingOptions"
       >
         <template v-slot:no-option>
           <!-- <q-item>
             <q-item-section class="text-grey"> No results </q-item-section>
           </q-item> -->
+        </template>
+
+        <template v-slot:option="scope">
+          <q-item
+            v-bind="scope.itemProps"
+            @click="handleOptionClick(scope.opt.id)"
+          >
+            <q-item-section>
+              <q-item-label>{{ scope.opt.attributes.barcode }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+
+        <template v-slot:selected v-if="search">
+          {{ search.attributes.barcode }}
         </template>
 
         <template #prepend>

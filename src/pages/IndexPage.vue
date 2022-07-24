@@ -8,13 +8,8 @@ import TheBuildingList from "src/components/buildings/TheBuildingList.vue";
 export default {
   async preFetch({ store }) {
     const $store = useStore(store);
-
-    try {
-      const { data } = await api.get("/api/objects");
-      $store.buildings = data.data;
-      $store.meta = data.meta;
-    } catch (err) {
-      console.log(err);
+    if (!$store.buildings.length) {
+      $store.initialBuildingFetch();
     }
   },
 
