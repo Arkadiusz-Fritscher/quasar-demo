@@ -106,6 +106,7 @@ const avatarName = computed(() => {
         clearable
         hide-dropdown-icon
         behavior="menu"
+        label="Suchen"
         :class="selectionStyle"
         :loading="isLoadingOptions"
       >

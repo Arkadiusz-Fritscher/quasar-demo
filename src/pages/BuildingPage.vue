@@ -82,6 +82,7 @@ const needGetOff = computed(() => {
         :ratio="$q.screen.gt.xs ? 16 / 9 : 4 / 3"
         fit="cover"
         :alt="building.attributes.barcode"
+        class="hero-img"
       />
     </section>
     <section>
@@ -122,11 +123,23 @@ const needGetOff = computed(() => {
         </li>
       </ul>
     </section>
+    <section class="img-gallery q-mt-xl">
+      <q-img
+        src="https://placeimg.com/600/400/nature"
+        :ratio="4 / 3"
+        v-for="i in 5"
+        :key="i"
+      >
+        <div class="absolute-bottom-right text-subtitle2" v-if="i === 1">
+          Hauptbild
+        </div>
+      </q-img>
+    </section>
   </q-page>
 </template>
 
 <style scoped lang="scss">
-.q-img {
+.hero-img {
   max-height: 500px;
 }
 
@@ -155,6 +168,18 @@ const needGetOff = computed(() => {
 
 .data-item-value {
   color: $grey-8;
+}
+
+.img-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: $breakpoint-sm-min) {
+  .img-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  }
 }
 
 @media (min-width: $breakpoint-sm-min) {
