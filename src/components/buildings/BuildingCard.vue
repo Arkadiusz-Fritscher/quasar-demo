@@ -24,7 +24,7 @@ const handleClick = (id) => {
       />
       <!-- </q-card-section> -->
 
-      <q-card-section>
+      <q-card-section class="q-pa-md">
         <div class="text-h5 text-weight-medium">
           {{ building.attributes.barcode }}
         </div>

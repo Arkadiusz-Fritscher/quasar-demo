@@ -49,17 +49,16 @@ const buildings = computed(() => {
   </q-page>
 </template>
 
-<style scoped>
-/* .gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 1fr);
-  gap: 24px;
-} */
-
+<style scoped lang="scss">
 .gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  grid-template-rows: masonry;
+  grid-template-columns: repeat(auto-fill, 1fr);
   gap: 1rem;
+}
+
+@media (min-width: $breakpoint-sm-min) {
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  }
 }
 </style>
