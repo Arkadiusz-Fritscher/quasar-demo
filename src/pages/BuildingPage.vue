@@ -1,6 +1,8 @@
 <script>
 import { useStore } from "src/stores/store";
 import { api } from "boot/axios";
+import BuildingEditDialog from "src/components/buildings/BuildingEditDialog.vue";
+import { ref } from "vue";
 
 export default {
   async preFetch(ctx) {
@@ -49,17 +51,27 @@ const needGetOff = computed(() => {
     ? "Notwendig"
     : "Nicht notwendig";
 });
+
+const isDialogOpen = ref(false);
 </script>
 
 <template>
   <q-page padding>
+    <BuildingEditDialog v-model="isDialogOpen" :building="building" />
     <section v-if="building">
       <div class="full-width row no-wrap justify-between items-center">
         <q-btn icon="mdi-chevron-left" size="md" flat round @click="goBack" />
         <h4 class="text-center text-weight-bold col q-my-md">
           {{ building.attributes.barcode }}
         </h4>
-        <q-btn icon="mdi-pencil" flat round v-if="store.canUserEdit" />
+
+        <q-btn
+          icon="mdi-pencil"
+          flat
+          round
+          v-if="store.canUserEdit"
+          @click="isDialogOpen = !isDialogOpen"
+        />
         <q-btn
           v-else
           icon="mdi-chevron-left"

@@ -17,7 +17,9 @@ export default boot(({ app, router, store }) => {
 
   const fetchUser = async () => {
     try {
-      const { data } = await api.get("/api/users/me");
+      const { data } = await api.get("/api/users/me", {
+        params: { populate: "*" },
+      });
       $store.user = data;
     } catch (err) {
       console.log(err);
