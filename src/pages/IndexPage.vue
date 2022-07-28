@@ -1,7 +1,7 @@
 <script>
 import { useStore } from "src/stores/store";
 import { ref } from "vue";
-import BasePageTitle from "src/components/BasePageTitle.vue";
+import BasePageTitle from "src/components/base/BasePageTitle.vue";
 import TheBuildingList from "src/components/buildings/TheBuildingList.vue";
 
 export default {

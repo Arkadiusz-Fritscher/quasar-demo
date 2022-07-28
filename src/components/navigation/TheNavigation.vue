@@ -1,22 +1,14 @@
 <script setup>
-import NavigationMenuLinkVue from "./NavigationMenuLink.vue";
 import { useStore } from "src/stores/store";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { computed, ref } from "vue";
 import { useQuasar } from "quasar";
+import TheNavSidebar from "src/components/navigation/TheNavSidebar.vue";
 
 const $q = useQuasar();
 const store = useStore();
 const router = useRouter();
-
-const menuLinks = [
-  {
-    title: "Bauwerke",
-    caption: "Liste aller Bauwerke",
-    icon: "mdi-home",
-    link: { name: "home" },
-  },
-];
+const route = useRoute();
 
 const isMenuOpen = ref(false);
 const toggleMenu = () => {
@@ -92,6 +84,10 @@ const avatarName = computed(() => {
         @click="toggleMenu"
       />
 
+      <q-toolbar-title :class="{ hidden: $q.screen.lt.md }">{{
+        route.meta.title || ""
+      }}</q-toolbar-title>
+
       <q-space />
 
       <q-select
@@ -144,52 +140,8 @@ const avatarName = computed(() => {
         class="q-ml-md"
         >{{ avatarName }}</q-avatar
       >
-      <!-- <q-input
-        dark
-        dense
-        standout
-        outline
-        v-model="search"
-        input-class="text-right"
-        class="q-ml-md"
-      >
-        <template v-slot:append>
-          <q-icon v-if="search === ''" name="mdi-magnify" />
-          <q-icon
-            v-else
-            name="mdi-close-circle"
-            class="cursor-pointer"
-            @click="search = ''"
-          />
-        </template>
-      </q-input> -->
-
-      <!-- <q-btn
-        flat
-        dense
-        round
-        icon="mdi-magnify"
-        aria-label="Menu"
-        @click="toggleMenu"
-      /> -->
     </q-toolbar>
-    <!-- <q-toolbar> search </q-toolbar> -->
   </q-header>
 
-  <q-drawer v-model="isMenuOpen" bordered>
-    <q-list>
-      <!-- Show close button on small screens -->
-      <q-toolbar class="lt-md">
-        <q-btn flat dense round icon="mdi-close" @click="toggleMenu" />
-      </q-toolbar>
-
-      <NavigationMenuLinkVue
-        v-for="link in menuLinks"
-        :key="link.title"
-        v-bind="link"
-      />
-    </q-list>
-  </q-drawer>
+  <TheNavSidebar v-model="isMenuOpen" />
 </template>
-
-<style scoped></style>

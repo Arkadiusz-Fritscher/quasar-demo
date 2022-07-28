@@ -9,11 +9,26 @@ const routes = [
       {
         path: "",
         name: "home",
+        meta: {
+          title: "Bauwerk Übersicht",
+        },
         component: () => import("pages/IndexPage.vue"),
+      },
+      {
+        path: "/sortieren",
+        name: "sort",
+        meta: {
+          title: "Bilder sortieren",
+          visible: "desktop",
+        },
+        component: () => import("src/pages/ImgSortPage.vue"),
       },
       {
         path: ":id",
         name: "building",
+        meta: {
+          title: "Bauwerk Details",
+        },
         component: () => import("src/pages/BuildingPage.vue"),
       },
     ],

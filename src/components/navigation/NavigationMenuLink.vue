@@ -20,7 +20,7 @@ defineProps({
 </script>
 
 <template>
-  <q-item clickable tag="a" :to="link">
+  <q-item clickable tag="a" :to="link" class="q-my-sm">
     <q-item-section v-if="icon" avatar>
       <q-icon :name="icon" />
     </q-item-section>
