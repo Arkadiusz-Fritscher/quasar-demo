@@ -8,7 +8,7 @@ const showBuildingList = ref(true);
 <template>
   <q-page padding>
     <TheSidebar v-model="showBuildingList" />
-    <div class="q-gutter-xl">
+    <div class="q-gutter-md row">
       <GroupCard v-for="n in 14" :key="n" :id="`group-${n}`">
         <q-card v-for="n in 11" :key="n" flat bordered>
           <img src="https://cdn.quasar.dev/img/parallax2.jpg" />

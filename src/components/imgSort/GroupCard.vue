@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <q-card flat bordered>
+  <q-card flat bordered class="group-card">
     <q-item class="card-header bg-grey-2">
       <q-item-section avatar>
         <q-avatar color="primary" text-color="white" icon="mdi-select-group" />
@@ -24,9 +24,13 @@
 </template>
 
 <style scoped lang="scss">
+.group-card {
+  flex: 1 1 40%;
+}
+
 .gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 1rem;
 }
 </style>
