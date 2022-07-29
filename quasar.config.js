@@ -27,7 +27,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ["axios", "auth"],
+    boot: ["axios", "auth", "draggable"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ["app.scss"],
@@ -87,7 +87,9 @@ module.exports = configure(function (ctx) {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
-      config: {},
+      config: {
+        notify: {},
+      },
 
       iconSet: "mdi-v5", // Quasar icon set
       lang: "de", // Quasar language pack
@@ -100,7 +102,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ["Cookies"],
+      plugins: ["Cookies", "Notify"],
     },
 
     // animations: 'all', // --- includes all animations

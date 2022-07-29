@@ -21,6 +21,17 @@ const routes = [
           title: "Bilder sortieren",
           visible: "desktop",
         },
+        // props: (route) => ({ query: route.query }),
+        component: () => import("src/pages/ImgSortPage.vue"),
+      },
+      {
+        path: "/sortieren",
+        name: "sort",
+        meta: {
+          title: "Query",
+          visible: "desktop",
+        },
+        // props: (route) => ({ query: route.query }),
         component: () => import("src/pages/ImgSortPage.vue"),
       },
       {
