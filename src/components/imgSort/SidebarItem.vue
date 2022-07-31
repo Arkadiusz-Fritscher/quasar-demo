@@ -1,9 +1,19 @@
 <script setup>
-defineProps({
+import { computed } from "vue";
+import { useFiles } from "src/stores/files";
+
+const props = defineProps({
   group: {
     type: String,
     required: true,
   },
+});
+
+const { files } = useFiles();
+const imageCount = computed(() => {
+  return files.filter(
+    (file) => file.barcode === props.group || file.related === props.group
+  ).length;
 });
 </script>
 
@@ -15,7 +25,9 @@ defineProps({
 
     <q-item-section>
       <q-item-label>{{ group }}</q-item-label>
-      <q-item-label caption>14 Bilder</q-item-label>
+      <q-item-label caption>{{
+        `${imageCount} ${imageCount === 1 ? "Bild" : "Bilder"}`
+      }}</q-item-label>
     </q-item-section>
   </q-item>
 </template>

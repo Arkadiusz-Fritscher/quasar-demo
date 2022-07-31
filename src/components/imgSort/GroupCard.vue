@@ -11,16 +11,17 @@ const props = defineProps({
 });
 
 const fileStore = useFiles();
+
 const relatedFiles = computed(() => {
+  if (!fileStore.files.length) return [];
   return fileStore.files.filter(
     (file) => file.barcode === props.group || file.related === props.group
   );
 });
 
 const showInCarousel = (images, slide) => {
-  console.log(images, slide);
   fileStore.currentCarouselSlide = slide;
-  fileStore.carouselImages = images.map((file) => file.img);
+  fileStore.carouselImages = images?.map((file) => file.img);
   fileStore.isCarouselOpen = true;
 };
 </script>

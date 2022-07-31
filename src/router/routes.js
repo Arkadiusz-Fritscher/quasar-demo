@@ -28,7 +28,7 @@ const routes = [
         path: "/sortieren",
         name: "sort",
         meta: {
-          title: "Query",
+          title: "Bilder sortieren",
           visible: "desktop",
         },
         // props: (route) => ({ query: route.query }),

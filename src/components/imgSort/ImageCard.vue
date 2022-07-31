@@ -1,13 +1,15 @@
 <script setup>
 import { ref } from "vue";
 import useUtils from "src/composables/utils";
+import { useFiles } from "src/stores/files";
 
-defineProps({
+const props = defineProps({
   content: {},
 });
 
-const { notify } = useUtils();
+const fileStore = useFiles();
 
+const { notify } = useUtils();
 const isDeleteDialogOpen = ref(false);
 const deleteImage = () => {
   console.log("delete image...");
@@ -24,14 +26,23 @@ const onNewReferenceBarcodeSubmit = async (e) => {
     newReferenceBarcode.value
   );
   if (isValid) {
-    console.log("handle..", newReferenceBarcode.value);
-
+    const file = fileStore.files.find((file) => file.id === props.content.id);
+    file.barcode = newReferenceBarcode.value;
+    file.related = "";
     isDialogOpen.value = false;
     referenceBarcodeInput.value.resetValidation();
     newReferenceBarcode.value = "";
 
     notify("Referenze Barcode wurde erstellt.");
   }
+};
+
+const moveImage = (group) => {
+  const file = fileStore.files.find((file) => file.id === props.content.id);
+  file.related = group;
+  file.barcode = "";
+
+  console.log(file);
 };
 </script>
 
@@ -108,12 +119,12 @@ const onNewReferenceBarcodeSubmit = async (e) => {
 
         <q-menu anchor="top end" self="top start" auto-close>
           <q-list>
-            <template v-for="n in 23" :key="n">
-              <q-item clickable>
+            <template v-for="group in fileStore.groups" :key="group">
+              <q-item clickable @click="moveImage(group)">
                 <q-item-section side>
                   <q-icon name="mdi-folder" size="xs" />
                 </q-item-section>
-                <q-item-section>{{ `N${n + 1}56` }}</q-item-section>
+                <q-item-section>{{ group }}</q-item-section>
               </q-item>
               <q-separator />
             </template>
