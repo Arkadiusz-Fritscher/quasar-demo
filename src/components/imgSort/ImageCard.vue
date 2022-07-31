@@ -36,7 +36,7 @@ const onNewReferenceBarcodeSubmit = async (e) => {
 </script>
 
 <template>
-  <q-card flat bordered>
+  <q-card flat bordered relative-position class="cursor-pointer">
     <q-dialog v-model="isDialogOpen" persistent>
       <q-card style="max-width: 400px">
         <q-card-section>
@@ -149,7 +149,7 @@ const onNewReferenceBarcodeSubmit = async (e) => {
       </q-item>
     </q-menu>
 
-    <img src="https://cdn.quasar.dev/img/parallax2.jpg" />
+    <q-img :src="content.img" />
 
     <q-item>
       <q-item-section>
@@ -157,6 +157,15 @@ const onNewReferenceBarcodeSubmit = async (e) => {
         <q-item-label caption>24.06.22 16:41</q-item-label>
       </q-item-section>
     </q-item>
+
+    <q-card-section class="absolute-right q-pa-sm">
+      <q-avatar
+        color="secondary"
+        size="sm"
+        text-color="white"
+        icon="mdi-crosshairs"
+      />
+    </q-card-section>
   </q-card>
 </template>
 

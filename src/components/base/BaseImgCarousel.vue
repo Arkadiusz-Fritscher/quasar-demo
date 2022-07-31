@@ -1,82 +1,34 @@
 <script setup>
 import { ref } from "vue";
+import { useFiles } from "src/stores/files";
 
-defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true,
-  },
-  images: {
-    type: Array,
-    required: true,
-  },
-});
-
-const emits = defineEmits(["update:modelValue"]);
-
-const fullscreen = ref(false);
-const slide = ref(0);
-
-const closeCarousel = () => {
-  emits("update:modelValue", false);
-};
+const files = useFiles();
 </script>
 
 <template>
-  <teleport to="body">
-    <q-dialog
-      :model-value="modelValue"
-      full-width
-      full-height
-      class="q-pa-lg relative-position"
-    >
+  <q-dialog v-model="files.isCarouselOpen" full-width full-height>
+    <div>
       <q-carousel
         swipeable
         animated
-        arrows
-        v-model="slide"
-        v-model:fullscreen="fullscreen"
-        infinite
+        thumbnails
+        v-model="files.currentCarouselSlide"
+        height="100%"
       >
-        <q-carousel-slide v-for="(img, i) in images" :key="i" :name="i">
-          <q-img :src="img" fit="scale-down" />
-        </q-carousel-slide>
-
-        <template v-slot:control>
-          <q-carousel-control position="bottom-right" :offset="[18, 18]">
-            <q-btn
-              push
-              round
-              dense
-              color="white"
-              text-color="primary"
-              :icon="
-                fullscreen ? 'mdi-arrow-collapse-all' : 'mdi-arrow-expand-all'
-              "
-              @click="fullscreen = !fullscreen"
-            />
-          </q-carousel-control>
-
-          <q-carousel-control position="top-right" :offset="[18, 18]">
-            <q-btn
-              push
-              round
-              dense
-              color="white"
-              text-color="primary"
-              icon="mdi-close"
-              @click="closeCarousel"
-            />
-          </q-carousel-control>
-        </template>
+        <q-carousel-slide
+          v-for="(img, i) in files.carouselImages"
+          :key="i"
+          :name="i"
+          :img-src="img"
+        />
       </q-carousel>
-    </q-dialog>
-  </teleport>
+    </div>
+  </q-dialog>
 </template>
 
 <style scoped>
-.q-img {
-  max-inline-size: 100%;
-  max-block-size: auto;
+.q-carousel__slide {
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 </style>

@@ -1,10 +1,28 @@
 <script setup>
-defineProps({
+import { computed } from "vue";
+import { useFiles } from "src/stores/files";
+import ImageCard from "src/components/imgSort/ImageCard.vue";
+
+const props = defineProps({
   group: {
     type: String,
     required: true,
   },
 });
+
+const fileStore = useFiles();
+const relatedFiles = computed(() => {
+  return fileStore.files.filter(
+    (file) => file.barcode === props.group || file.related === props.group
+  );
+});
+
+const showInCarousel = (images, slide) => {
+  console.log(images, slide);
+  fileStore.currentCarouselSlide = slide;
+  fileStore.carouselImages = images.map((file) => file.img);
+  fileStore.isCarouselOpen = true;
+};
 </script>
 
 <template>
@@ -24,7 +42,12 @@ defineProps({
 
     <q-card-section class="q-pa-sm q-ma-none">
       <div class="gallery">
-        <slot></slot>
+        <ImageCard
+          v-for="(file, i) in relatedFiles"
+          :key="file.id"
+          :content="file"
+          @click="showInCarousel(relatedFiles, i)"
+        />
       </div>
     </q-card-section>
   </q-card>

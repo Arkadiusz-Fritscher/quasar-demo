@@ -1,5 +1,8 @@
 <script setup>
 import SidebarItem from "./SidebarItem.vue";
+import { useFiles } from "src/stores/files";
+
+const files = useFiles();
 </script>
 
 <template>
@@ -12,8 +15,8 @@ import SidebarItem from "./SidebarItem.vue";
   >
     <q-scroll-area class="fit">
       <q-list>
-        <template v-for="n in 15" :key="n">
-          <SidebarItem :to="{ hash: `#group-${n}` }" />
+        <template v-for="group of files.sortedGroups" :key="group">
+          <SidebarItem :to="{ hash: `#${group}` }" :group="group" />
           <q-separator spaced inset />
         </template>
       </q-list>

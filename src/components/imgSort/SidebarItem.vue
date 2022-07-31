@@ -1,4 +1,11 @@
-<script setup></script>
+<script setup>
+defineProps({
+  group: {
+    type: String,
+    required: true,
+  },
+});
+</script>
 
 <template>
   <q-item class="q-mt-sm">
@@ -7,7 +14,7 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>Single line item</q-item-label>
+      <q-item-label>{{ group }}</q-item-label>
       <q-item-label caption>14 Bilder</q-item-label>
     </q-item-section>
   </q-item>
