@@ -2,17 +2,18 @@
 import { ref } from "vue";
 import useUtils from "src/composables/utils";
 import { useFiles } from "src/stores/files";
+import useFileSystem from "src/composables/fileSystem.js";
 
 const props = defineProps({
   content: {},
 });
 
 const fileStore = useFiles();
+const { findImagesInTimeRange } = useFileSystem();
 
 const { notify } = useUtils();
 const isDeleteDialogOpen = ref(false);
 const deleteImage = () => {
-  console.log("delete image...");
   isDeleteDialogOpen.value = false;
   notify("Bild wurde erfolgreich gelöscht");
 };
@@ -27,11 +28,13 @@ const onNewReferenceBarcodeSubmit = async (e) => {
   );
   if (isValid) {
     const file = fileStore.files.find((file) => file.id === props.content.id);
-    file.barcode = newReferenceBarcode.value;
-    file.related = "";
+    fileStore.createNewGroup(newReferenceBarcode.value);
+    file.data.barcode = newReferenceBarcode.value;
+    file.data.related = "";
     isDialogOpen.value = false;
     referenceBarcodeInput.value.resetValidation();
     newReferenceBarcode.value = "";
+    findImagesInTimeRange();
 
     notify("Referenze Barcode wurde erstellt.");
   }
@@ -39,10 +42,11 @@ const onNewReferenceBarcodeSubmit = async (e) => {
 
 const moveImage = (group) => {
   const file = fileStore.files.find((file) => file.id === props.content.id);
-  file.related = group;
-  file.barcode = "";
 
-  console.log(file);
+  file.data.barcode = "";
+  file.data.related = group;
+
+  findImagesInTimeRange();
 };
 </script>
 
@@ -160,16 +164,18 @@ const moveImage = (group) => {
       </q-item>
     </q-menu>
 
-    <q-img :src="content.img" />
+    <q-img :src="content.url" />
 
     <q-item>
       <q-item-section>
-        <q-item-label>GOPRO65231</q-item-label>
-        <q-item-label caption>24.06.22 16:41</q-item-label>
+        <q-item-label>{{ content.name }}</q-item-label>
+        <q-item-label caption>{{
+          `${content.data.date} - ${content.data.time}`
+        }}</q-item-label>
       </q-item-section>
     </q-item>
 
-    <q-card-section class="absolute-right q-pa-sm">
+    <q-card-section class="absolute-right q-pa-sm" v-if="content.data.barcode">
       <q-avatar
         color="secondary"
         size="sm"

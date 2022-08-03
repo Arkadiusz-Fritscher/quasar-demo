@@ -9,18 +9,23 @@ const props = defineProps({
   },
 });
 
-const { files } = useFiles();
+const { files, unknownGroupName } = useFiles();
 const imageCount = computed(() => {
   return files.filter(
-    (file) => file.barcode === props.group || file.related === props.group
+    (file) =>
+      file.data.barcode === props.group || file.data.related === props.group
   ).length;
+});
+
+const iconStyle = computed(() => {
+  return props.group === unknownGroupName ? "red-12" : "secondary";
 });
 </script>
 
 <template>
   <q-item class="q-mt-sm">
     <q-item-section side>
-      <q-icon name="mdi-folder" color="secondary" />
+      <q-icon name="mdi-folder" :color="iconStyle" />
     </q-item-section>
 
     <q-item-section>

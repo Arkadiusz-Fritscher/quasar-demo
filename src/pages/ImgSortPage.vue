@@ -1,20 +1,33 @@
 <script setup>
-import { ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import TheSidebar from "src/components/imgSort/TheSidebar.vue";
 import GroupCard from "src/components/imgSort/GroupCard.vue";
-
+import useFileSystem from "src/composables/fileSystem";
 import { useFiles } from "src/stores/files";
+import { useRoute, useRouter } from "vue-router";
+
+const { openFiles } = useFileSystem();
+const route = useRoute();
+const router = useRouter();
 
 const files = useFiles();
 const showBuildingList = ref(true);
+
+onBeforeMount(() => {
+  const fileStore = useFiles();
+
+  if (route.hash && !fileStore.files.length) {
+    router.push({ name: "sort" });
+  }
+});
 </script>
 
 <template>
   <q-page padding>
     <!-- <BaseImgCarousel v-model="showCarousel" :images="fullImages" /> -->
-    <TheSidebar v-model="showBuildingList" v-if="files.groups.length" />
+    <TheSidebar v-model="showBuildingList" v-if="files.files.length" />
 
-    <div class="gallery" v-if="files.groups.length">
+    <div class="gallery" v-if="files.files.length">
       <GroupCard
         v-for="group of files.sortedGroups"
         :key="group"
@@ -32,7 +45,10 @@ const showBuildingList = ref(true);
         Die Bilder werden nicht hochgeladen, stattdessen werden sie direkt vom
         Computer gelesen. Deswegen wirst du vom Browser nach der erlaubnis
         gefragt. Solltest du nicht zustimmen ist es nicht möglich die Bilder zu
-        sortieren.
+        sortieren. Diese funktion ist momentan nur in <b>Chrome</b> und
+        <b>Edge</b> Browsern vefügbar. Solltest du Firefox oder Safari verwenden
+        nutze bitte einen der genanten Browser oder sortieren die Bilder von
+        Hand.
       </div>
 
       <q-btn
@@ -41,6 +57,7 @@ const showBuildingList = ref(true);
         color="primary"
         unelevated
         class="q-mt-lg"
+        @click="openFiles"
       />
     </div>
   </q-page>
@@ -49,7 +66,7 @@ const showBuildingList = ref(true);
 <style scoped lang="scss">
 .gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
   gap: 0.75rem;
 }
 
@@ -58,15 +75,15 @@ const showBuildingList = ref(true);
   max-width: 58ch;
 }
 
-@media (min-width: $breakpoint-sm-min) {
-  .gallery {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-}
+// @media (min-width: $breakpoint-sm-min) {
+//   .gallery {
+//     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+//   }
+// }
 
-@media (min-width: $breakpoint-lg-min) {
-  .gallery {
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  }
-}
+// @media (min-width: $breakpoint-lg-min) {
+//   .gallery {
+//     grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+//   }
+// }
 </style>

@@ -9,6 +9,8 @@ export const useStore = defineStore("store", {
     user: null,
     token: null,
     isFetchingBuildings: false,
+    gpsRadius: 8, //Meter
+    timeRange: 3, // Minuten
   }),
 
   getters: {
