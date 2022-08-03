@@ -3,7 +3,7 @@ import ExifReader from "exifreader";
 import useUtils from "src/composables/utils";
 // import { set, entries } from "idb-keyval";
 import { useFiles } from "src/stores/files";
-import useFileSystem from "./fileSystem";
+import useFileSystem from "src/composables/fileSystem";
 import { Notify } from "quasar";
 
 const { UUID } = useUtils();

@@ -7,6 +7,7 @@ import axios from "axios";
 import { watch, ref, computed } from "vue";
 import { Notify } from "quasar";
 import useCompressor from "src/composables/compressor.js";
+import { buildings } from "src/api/buildings";
 
 const fileStore = useFiles();
 const store = useStore();
@@ -144,41 +145,36 @@ export default function useFileSystem() {
 
   const findLocation = async (files = fileStore.files) => {
     fileStore.fileLoadingState = "Passende Bauwerke werden gesucht..";
-    try {
-      const { data } = await axios.get("src/api/buildings.json");
 
-      for (const file of files) {
-        if (!file.data.gps) {
-          fileStore.createNewGroup(fileStore.unknownGroupName);
-          file.data.related = fileStore.unknownGroupName;
-          continue;
-        }
-
-        const building = findNearbyObject(file.data, data);
-
-        if (building) {
-          fileStore.createNewGroup(building.barcode);
-          file.data.barcode = building.barcode;
-          file.data.location = building.location;
-          file.data.type = building.type;
-          file.data.description = building.description;
-          continue;
-        } else {
-          file.data.barcode = "";
-          file.data.related = fileStore.unknownGroupName;
-          file.data.location = "";
-          file.data.type = "";
-          file.data.description = "";
-          continue;
-        }
+    for (const file of files) {
+      if (!file.data.gps) {
+        fileStore.createNewGroup(fileStore.unknownGroupName);
+        file.data.related = fileStore.unknownGroupName;
+        continue;
       }
 
-      fileStore.fileLoadingState = "Fertig!";
-      fileStore.deleteEmptyGroups();
-      findImagesInTimeRange();
-    } catch (err) {
-      console.error(err.message);
+      const building = findNearbyObject(file.data, buildings);
+
+      if (building) {
+        fileStore.createNewGroup(building.barcode);
+        file.data.barcode = building.barcode;
+        file.data.location = building.location;
+        file.data.type = building.type;
+        file.data.description = building.description;
+        continue;
+      } else {
+        file.data.barcode = "";
+        file.data.related = fileStore.unknownGroupName;
+        file.data.location = "";
+        file.data.type = "";
+        file.data.description = "";
+        continue;
+      }
     }
+
+    fileStore.fileLoadingState = "Fertig!";
+    fileStore.deleteEmptyGroups();
+    findImagesInTimeRange();
   };
 
   const findImagesInTimeRange = () => {

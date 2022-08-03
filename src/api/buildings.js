@@ -1,4 +1,4 @@
-const buildings = [
+export const buildings = [
   {
     id: 2,
     barcode: "S332",
