@@ -45,8 +45,6 @@ const moveImage = (group) => {
 
   file.data.barcode = "";
   file.data.related = group;
-
-  findImagesInTimeRange();
 };
 </script>
 

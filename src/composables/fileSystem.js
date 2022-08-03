@@ -161,10 +161,11 @@ export default function useFileSystem() {
         file.data.location = building.location;
         file.data.type = building.type;
         file.data.description = building.description;
+        file.data.related = "";
         continue;
       } else {
         file.data.barcode = "";
-        file.data.related = fileStore.unknownGroupName;
+        // file.data.related = fileStore.unknownGroupName;
         file.data.location = "";
         file.data.type = "";
         file.data.description = "";
@@ -179,10 +180,7 @@ export default function useFileSystem() {
 
   const findImagesInTimeRange = () => {
     for (const file of fileStore.files) {
-      if (
-        file.data.barcode ||
-        file.data.related !== fileStore.unknownGroupName
-      ) {
+      if (file.data.barcode) {
         continue;
       }
 
@@ -198,7 +196,7 @@ export default function useFileSystem() {
 
       if (fileInTimeRange) {
         file.data.related = fileInTimeRange.data.barcode;
-      } else if ((file.data.related = fileStore.unknownGroupName)) {
+      } else if (file.data.related !== fileStore.unknownGroupName) {
         continue;
       } else {
         file.data.related = fileStore.unknownGroupName;
