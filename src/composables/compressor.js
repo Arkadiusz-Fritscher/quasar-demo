@@ -29,8 +29,18 @@ export default function useCompressor() {
         const id = UUID();
 
         if (tags) {
-          data.date = dateTime[0];
-          data.time = dateTime[1];
+          const localDate = new Date(
+            dateTime[0].replace(/\D/g, "-")
+          ).toLocaleDateString("de-DE", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "2-digit",
+          });
+
+          const [hh, mm, ss] = dateTime[1].split(":");
+
+          data.date = localDate;
+          data.time = `${hh}:${mm}`;
         }
 
         if (gps) {

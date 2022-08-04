@@ -2,13 +2,24 @@
 import SidebarItem from "./SidebarItem.vue";
 import { useFiles } from "src/stores/files";
 import { useStore } from "src/stores/store";
+import useZip from "src/composables/jszip";
 import { ref } from "vue";
+import saveFile from "src/composables/fileSaver";
 
 const files = useFiles();
 const store = useStore();
+const { generateZip } = useZip();
 
 const isAddNewGroupModalOpen = ref(false);
 const newGroupName = ref("");
+
+const handleFileDownload = async () => {
+  if (files.files.length) {
+    generateZip(files.files).then((zipped) => {
+      saveFile(zipped);
+    });
+  }
+};
 </script>
 
 <template>
@@ -71,6 +82,19 @@ const newGroupName = ref("");
 
       <q-item>
         <q-item-section>
+          <q-btn
+            label="Download"
+            color="primary"
+            unelevated
+            icon="mdi-download"
+            :disable="!files.files.length"
+            @click="handleFileDownload"
+          />
+        </q-item-section>
+      </q-item>
+
+      <q-item>
+        <q-item-section>
           <q-item-label caption>GPS Radius</q-item-label>
           <q-slider
             v-model="store.gpsRadius"
@@ -103,7 +127,7 @@ const newGroupName = ref("");
 </template>
 
 <style scoped lang="scss">
-$optionHeight: 59.39 * 2 + 52 + px;
+$optionHeight: 59.39 * 2 + 52.0078 + 53.0078 + px;
 
 .options {
   height: $optionHeight;
@@ -112,6 +136,6 @@ $optionHeight: 59.39 * 2 + 52 + px;
 
 .q-scrollarea {
   margin-bottom: $optionHeight;
-  height: calc(100% - $optionHeight);
+  height: calc(100% - #{$optionHeight}) !important;
 }
 </style>

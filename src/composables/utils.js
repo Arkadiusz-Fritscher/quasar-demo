@@ -33,7 +33,7 @@ export default function useUtils() {
   function timeToMin(time) {
     if (!time) return time;
 
-    const [h, m, s] = time.split(":");
+    const [h, m] = time.split(":");
     const timeInMin = Number(h) * 60 + Number(m);
     return timeInMin;
   }
