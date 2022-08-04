@@ -127,7 +127,7 @@ const handleFileDownload = async () => {
 </template>
 
 <style scoped lang="scss">
-$optionHeight: 59.39 * 2 + 52.0078 + 53.0078 + px;
+$optionHeight: 223.789px;
 
 .options {
   height: $optionHeight;
