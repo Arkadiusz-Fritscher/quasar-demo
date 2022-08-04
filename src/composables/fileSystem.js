@@ -147,7 +147,7 @@ export default function useFileSystem() {
     fileStore.fileLoadingState = "Passende Bauwerke werden gesucht..";
 
     for (const file of files) {
-      if (!file.data.gps) {
+      if (!file.data.gps || file.data.isReference) {
         fileStore.createNewGroup(fileStore.unknownGroupName);
         file.data.related = fileStore.unknownGroupName;
         continue;
@@ -180,7 +180,7 @@ export default function useFileSystem() {
 
   const findImagesInTimeRange = () => {
     for (const file of fileStore.files) {
-      if (file.data.barcode) {
+      if (file.data.barcode || file.data.isReference) {
         continue;
       }
 
@@ -196,8 +196,6 @@ export default function useFileSystem() {
 
       if (fileInTimeRange) {
         file.data.related = fileInTimeRange.data.barcode;
-      } else if (file.data.related !== fileStore.unknownGroupName) {
-        continue;
       } else {
         file.data.related = fileStore.unknownGroupName;
       }

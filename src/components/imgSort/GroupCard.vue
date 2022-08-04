@@ -17,7 +17,8 @@ const relatedFiles = computed(() => {
   return fileStore.files.filter(
     (file) =>
       file.data.barcode?.toLowerCase() === props.group.toLowerCase() ||
-      file.data.related?.toLowerCase() === props.group.toLowerCase()
+      (file.data.related?.toLowerCase() === props.group.toLowerCase() &&
+        !file.data.isReference)
   );
 });
 

@@ -31,6 +31,7 @@ const onNewReferenceBarcodeSubmit = async (e) => {
     fileStore.createNewGroup(newReferenceBarcode.value);
     file.data.barcode = newReferenceBarcode.value;
     file.data.related = "";
+    file.data.isReference = true;
     isDialogOpen.value = false;
     referenceBarcodeInput.value.resetValidation();
     newReferenceBarcode.value = "";
