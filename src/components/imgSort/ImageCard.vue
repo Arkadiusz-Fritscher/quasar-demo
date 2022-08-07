@@ -47,6 +47,12 @@ const moveImage = (group) => {
   file.data.barcode = "";
   file.data.related = group;
 };
+
+const uploadImage = ref(false);
+const handleUploadImage = () => {
+  const file = fileStore.files.find((file) => file.id === props.content.id);
+  file.upload = uploadImage.value;
+};
 </script>
 
 <template>
@@ -167,7 +173,7 @@ const moveImage = (group) => {
 
     <q-item>
       <q-item-section>
-        <q-item-label>{{ content.name }}</q-item-label>
+        <q-item-label class="text-body2">{{ content.name }}</q-item-label>
         <q-item-label caption>{{
           `${content.data.date} - ${content.data.time}`
         }}</q-item-label>
@@ -182,7 +188,27 @@ const moveImage = (group) => {
         icon="mdi-crosshairs"
       />
     </q-card-section>
+
+    <q-card-section class="absolute-left q-pa-none">
+      <!-- <q-avatar color="grey-4" size="sm" text-color="white"> -->
+      <q-checkbox
+        v-model="uploadImage"
+        keep-color
+        color="secondary"
+        @click="handleUploadImage"
+      />
+      <!-- </q-avatar> -->
+    </q-card-section>
   </q-card>
 </template>
 
-<style scoped></style>
+<style scoped>
+/* .q-checkbox__bg {
+  background-color: white;
+} */
+
+.q-checkbox:is([aria-checked="false"]):deep(.q-checkbox__inner
+    .q-checkbox__bg) {
+  background: white;
+}
+</style>

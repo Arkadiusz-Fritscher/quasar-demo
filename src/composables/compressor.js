@@ -28,7 +28,7 @@ export default function useCompressor() {
         const data = { related: "" };
         const id = UUID();
 
-        if (tags) {
+        if (dateTime) {
           const localDate = new Date(
             dateTime[0].replace(/\D/g, "-")
           ).toLocaleDateString("de-DE", {

@@ -1,6 +1,7 @@
 <script setup>
+import { computed } from "vue";
 import { useRouter } from "vue-router";
-defineProps({
+const props = defineProps({
   building: {
     type: Object,
     required: true,
@@ -12,16 +13,23 @@ const router = useRouter();
 const handleClick = (id) => {
   router.push({ name: "building", params: { id } });
 };
+
+const buildingThumbnail = computed(() => {
+  return props.building.attributes.thumbnail?.data
+    ? props.building.attributes.thumbnail?.data?.attributes?.url
+    : "placeholder/noImg@1x.png";
+});
 </script>
 
 <template>
-  <q-card bordered flat @click="handleClick(building.id)">
+  <q-card
+    bordered
+    flat
+    @click="handleClick(building.id)"
+    class="cursor-pointer"
+  >
     <q-card-section horizontal>
-      <!-- <q-card-section class="col-5 flex flex-center"> -->
-      <q-img
-        class="col-5 height-full"
-        src="https://picsum.photos/400/300.jpg"
-      />
+      <q-img class="col-5 height-full" :src="buildingThumbnail" />
       <!-- </q-card-section> -->
 
       <q-card-section class="q-pa-md">

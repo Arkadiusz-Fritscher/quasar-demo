@@ -13,6 +13,8 @@ export const useFiles = defineStore("files", {
     fileLoadingState: "",
     loadedFiles: 0,
     unknownGroupName: "Nicht Gruppierte Bilder",
+    showSidecard: false,
+    sidecardBuilding: "",
   }),
 
   getters: {

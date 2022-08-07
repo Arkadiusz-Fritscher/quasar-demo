@@ -4,6 +4,13 @@ import { useStore } from "src/stores/store";
 import { useRoute } from "vue-router";
 import { api } from "boot/axios";
 
+const props = defineProps({
+  currentBuilding: {
+    type: Object,
+    required: true,
+  },
+});
+
 const store = useStore();
 const route = useRoute();
 const currentBuildingValues = ref();
@@ -19,7 +26,7 @@ watch(route, (to, from) => {
 
 const setActiveBuildingValues = () => {
   const { barcode, location, type, description } = unref(
-    store.currentBuilding.attributes
+    props.currentBuilding.attributes
   );
   currentBuildingValues.value = { barcode, location, type, description };
 };
@@ -35,7 +42,7 @@ const changedBuildingValues = () => {
   const changesVales = {};
   for (const [key, value] of Object.entries(currentBuildingValues.value)) {
     if (
-      store.currentBuilding.attributes[key] !== currentBuildingValues.value[key]
+      props.currentBuilding.attributes[key] !== currentBuildingValues.value[key]
     ) {
       changesVales[key] = value;
     }

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "boot/axios";
+import { useFiles } from "./files";
 
 export const useStore = defineStore("store", {
   state: () => ({
@@ -95,7 +96,7 @@ export const useStore = defineStore("store", {
       try {
         const options = {
           params: {
-            "filters[barcode][$containsi]": `${barcode}`,
+            "filters[barcode][$contains]": `${barcode}`,
             fields: "barcode",
             "pagination[pageSize]": "5",
           },
@@ -105,6 +106,81 @@ export const useStore = defineStore("store", {
         return data.data;
       } catch (err) {
         console.log(err.message);
+      }
+    },
+
+    prepSortedImagesForUpload() {
+      const fileStore = useFiles();
+
+      if (!fileStore.files.length) return;
+
+      const filesToUpload = fileStore.files.filter((files) => files.upload);
+
+      if (!filesToUpload.length) return;
+
+      const groupedFiles = filesToUpload.reduce((group, item) => {
+        const barcode = item.data.barcode || item.data.related;
+
+        if (barcode === fileStore.unknownGroupName) return group;
+
+        if (!group[barcode]) {
+          group[barcode] = [];
+        }
+
+        group[barcode].push(item);
+        return group;
+      }, {});
+
+      for (const [group, files] of Object.entries(groupedFiles)) {
+        this.uploadImages(group, files);
+      }
+    },
+
+    async uploadImages(barcode, files) {
+      // TODO:add some upload feedback and set thumbnail if object hasn't one
+      try {
+        console.log("upload images...");
+        const options = {
+          params: {
+            "filters[barcode][$eq]": `${barcode}`,
+            fields: "barcode",
+            populate: "thumbnail",
+          },
+        };
+
+        const { data } = await api.get("/api/objects", options);
+        if (!data.data.length) return;
+
+        let hasThumbnail = data.data[0].thumbnail?.data ? true : false;
+        const objectID = data.data[0].id;
+
+        for (const file of files) {
+          const formData = new FormData();
+
+          formData.append("files", file.file, `${barcode}_${file.id}`);
+          formData.append("refId", objectID);
+          formData.append("ref", "api::object.object");
+          formData.append("field", "images");
+          formData.append(
+            "fileInfo",
+            `{"caption":"${barcode}","alternativeText":"${barcode}","name":"${barcode}_${file.id}"}`
+          );
+
+          const res = await api.post("/api/upload", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+
+          console.log("upload done ", res);
+
+          if (!hasThumbnail) {
+            hasThumbnail = true;
+            await api.put(`api/objects/${objectID}`, {
+              data: { thumbnail: res.data[0].id },
+            });
+          }
+        }
+      } catch (err) {
+        console.log(err);
       }
     },
   },

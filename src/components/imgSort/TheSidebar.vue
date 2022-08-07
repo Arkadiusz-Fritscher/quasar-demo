@@ -20,6 +20,10 @@ const handleFileDownload = async () => {
     });
   }
 };
+
+const handleFileUpload = async () => {
+  store.prepSortedImagesForUpload();
+};
 </script>
 
 <template>
@@ -89,6 +93,19 @@ const handleFileDownload = async () => {
             icon="mdi-download"
             :disable="!files.files.length"
             @click="handleFileDownload"
+          />
+        </q-item-section>
+      </q-item>
+
+      <q-item>
+        <q-item-section>
+          <q-btn
+            label="Upload"
+            color="primary"
+            unelevated
+            icon="mdi-upload"
+            :disable="!files.files.length"
+            @click="handleFileUpload"
           />
         </q-item-section>
       </q-item>

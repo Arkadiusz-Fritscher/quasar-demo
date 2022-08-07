@@ -29,38 +29,112 @@ export default {
     }
   },
 };
-</script>
+</script> -->
 
 <script setup>
-import { computed } from "vue";
-import { useRouter } from "vue-router";
+import { computed, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import BuildingEditDialog from "src/components/buildings/BuildingEditDialog.vue";
+import { useStore } from "src/stores/store";
+
+const props = defineProps({
+  building: {
+    type: Object,
+    required: true,
+  },
+});
 
 const store = useStore();
+const route = useRoute();
 const router = useRouter();
-
-const building = computed(() => {
-  return store.currentBuilding;
-});
 
 const goBack = () => {
   router.go(-1);
 };
 
 const needGetOff = computed(() => {
-  return building.value.attributes.type.toLowerCase() === "armaturenschacht"
+  return props.building.attributes.type.toLowerCase() === "armaturenschacht"
     ? "Notwendig"
     : "Nicht notwendig";
 });
 
 const isDialogOpen = ref(false);
+
+// Cloudinary Image Src
+
+const buildingThumbnail = computed(() => {
+  return props.building.attributes.thumbnail?.data
+    ? props.building.attributes.thumbnail?.data?.attributes?.url
+    : "placeholder/noImg@1x.png";
+});
+
+const buildingImages = computed(() => {
+  return props.building.attributes.images?.data
+    ? props.building.attributes.images?.data
+    : false;
+});
+
+// const host = "https://res.cloudinary.com/dsqqvekth/image/upload";
+
+// const imgSrc = computed(() => {
+//   if (props.attributes?.provider_metadata) {
+//     const ext = props.attributes.ext;
+//     const file = props.attributes.provider_metadata.public_id;
+//     return `${host}/w_${300}/${file}${ext}`;
+//   }
+
+//   if (props.attributes?.url) {
+//     return props.attributes.url;
+//   }
+
+//   return "/noImg@0.25x.png";
+// });
+
+// const createSrcset = (path, file, ext) => {
+//   const breakpoints = [480, 960, 1440, 1920];
+//   let srcSet = "";
+
+//   breakpoints.forEach((breakpoint) => {
+//     srcSet += `${path}/w_${breakpoint}/${file}${ext} ${breakpoint}w,`;
+//   });
+
+//   return srcSet;
+// };
+
+// const srcSet = computed(
+//   (meta = props.building.attributes?.provider_metadata || false) => {
+//     if (meta) {
+//       const ext = props.attributes.ext;
+//       const public_id = meta.public_id;
+
+//       return createSrcset(host, public_id, ext);
+//     }
+
+//     return `
+
+//         /noImg@0.25x.png  480w,
+//         /noImg@0.5x.png   960w,
+//         /noImg@0.75x.png 1440w,
+//         /noImg@1x.png    1920w
+
+//     `;
+//   }
+// );
 </script>
 
 <template>
   <q-page padding>
-    <BuildingEditDialog v-model="isDialogOpen" :building="building" />
-    <section v-if="building">
+    <BuildingEditDialog v-model="isDialogOpen" :currentBuilding="building" />
+    <section>
       <div class="full-width row no-wrap justify-between items-center">
-        <q-btn icon="mdi-chevron-left" size="md" flat round @click="goBack" />
+        <q-btn
+          icon="mdi-chevron-left"
+          size="md"
+          flat
+          round
+          @click="goBack"
+          v-if="route.name === 'building'"
+        />
         <h4 class="text-center text-weight-bold col q-my-md">
           {{ building.attributes.barcode }}
         </h4>
@@ -69,7 +143,7 @@ const isDialogOpen = ref(false);
           icon="mdi-pencil"
           flat
           round
-          v-if="store.canUserEdit"
+          v-if="store.canUserEdit && route.name === 'building'"
           @click="isDialogOpen = !isDialogOpen"
         />
         <q-btn
@@ -86,11 +160,7 @@ const isDialogOpen = ref(false);
 
     <section>
       <q-img
-        :src="
-          building.attributes.thumbnail.data
-            ? building.attributes.thumbnail.data.attributes.url
-            : 'https://placeimg.com/1600/900/nature'
-        "
+        :src="buildingThumbnail"
         :ratio="$q.screen.gt.xs ? 16 / 9 : 4 / 3"
         fit="cover"
         :alt="building.attributes.barcode"
@@ -137,16 +207,16 @@ const isDialogOpen = ref(false);
     </section>
 
     <q-separator class="q-mt-md q-mb-lg" />
-    <section class="img-gallery">
+    <section class="img-gallery" v-if="buildingImages">
       <q-img
-        src="https://placeimg.com/600/400/nature"
+        v-for="image in buildingImages"
         :ratio="4 / 3"
-        v-for="i in 5"
-        :key="i"
+        :src="image.attributes.url"
+        :key="image.id"
       >
-        <div class="absolute-bottom-right text-subtitle2" v-if="i === 1">
+        <!-- <div class="absolute-bottom-right text-subtitle2" v-if="i === 1">
           Hauptbild
-        </div>
+        </div> -->
       </q-img>
     </section>
   </q-page>
@@ -205,51 +275,4 @@ const isDialogOpen = ref(false);
     flex: 1 0 20%;
   }
 }
-</style> -->
-
-<script setup>
-import TheBuildingDetail from "src/components/buildings/TheBuildingDetail.vue";
-import { api } from "boot/axios";
-import { onBeforeMount, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
-
-const route = useRoute();
-const router = useRouter();
-const currentBuilding = ref();
-const isLoading = ref(false);
-
-const fetchBuilding = async (id) => {
-  try {
-    isLoading.value = true;
-    const options = {
-      params: { populate: "*" },
-    };
-
-    const { data } = await api.get(`/api/objects/${id}`, options);
-
-    currentBuilding.value = data.data;
-    isLoading.value = false;
-    return data.data;
-  } catch (err) {
-    console.log(err.message);
-
-    if (err.response.status == 404) {
-      router.push({ name: "404" });
-    }
-  }
-};
-
-onBeforeMount(() => {
-  fetchBuilding(route.params.id);
-});
-
-watch(route, (value) => {
-  fetchBuilding(value.params.id);
-});
-</script>
-
-<template>
-  <TheBuildingDetail :building="currentBuilding" v-if="!isLoading" />
-</template>
-
-<style scoped></style>
+</style>

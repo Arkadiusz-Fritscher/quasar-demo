@@ -47,6 +47,24 @@ const buildingType = computed(() => {
 
   return fileWithGPS ? fileWithGPS.data.type : false;
 });
+
+const setSidecardBuilding = (barcode) => {
+  if (barcode === fileStore.unknownGroupName) {
+    return;
+  }
+
+  if (fileStore.showSidecard) {
+    if (fileStore.sidecardBuilding === barcode) {
+      fileStore.showSidecard = false;
+      fileStore.sidecardBuilding = "";
+    } else {
+      fileStore.sidecardBuilding = barcode;
+    }
+  } else {
+    fileStore.sidecardBuilding = barcode;
+    fileStore.showSidecard = true;
+  }
+};
 </script>
 
 <template>
@@ -57,6 +75,8 @@ const buildingType = computed(() => {
           :color="avatarColor"
           text-color="white"
           icon="mdi-select-group"
+          @click="setSidecardBuilding(group)"
+          :class="{ 'cursor-pointer': group !== fileStore.unknownGroupName }"
         />
       </q-item-section>
 

@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, onMounted, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import TheSidebar from "src/components/imgSort/TheSidebar.vue";
 import GroupCard from "src/components/imgSort/GroupCard.vue";
 import useFileSystem from "src/composables/fileSystem";
@@ -24,7 +24,6 @@ onBeforeMount(() => {
 
 <template>
   <q-page padding>
-    <!-- <BaseImgCarousel v-model="showCarousel" :images="fullImages" /> -->
     <TheSidebar v-model="showBuildingList" v-if="files.files.length" />
 
     <div class="gallery" v-if="files.files.length">
