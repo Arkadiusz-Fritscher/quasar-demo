@@ -144,7 +144,7 @@ const handleFileUpload = async () => {
 </template>
 
 <style scoped lang="scss">
-$optionHeight: 223.789px;
+$optionHeight: 280px;
 
 .options {
   height: $optionHeight;
